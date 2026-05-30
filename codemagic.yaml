@@ -1,6 +1,6 @@
 workflows:
   android-build:
-    name: Android Build (APK)
+    name: Android Build (Fixed)
     max_build_duration: 60
 
     environment:
@@ -13,24 +13,20 @@ workflows:
         - ~/.gradle
 
     scripts:
-      - name: Install dependencies
+      - name: Clean install dependencies
         script: |
-          npm install
+          rm -rf node_modules package-lock.json
+          npm install --legacy-peer-deps
 
-      - name: Clean Android build
+      - name: Android clean
         script: |
           cd android
           ./gradlew clean
 
-      - name: Build APK (Release)
+      - name: Build APK
         script: |
           cd android
           ./gradlew assembleRelease
 
     artifacts:
       - android/app/build/outputs/**/*.apk
-
-    publishing:
-      email:
-        recipients:
-          - prince.ar.abdur.rahman2008@gmail.com
