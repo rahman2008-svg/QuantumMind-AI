@@ -1,26 +1,25 @@
 workflows:
   android-build:
-    name: Android Build Fixed
-    max_build_duration: 60
+    name: QuantumMind Fixed Build
 
     environment:
-      node: 18
+      node: 20
       java: 17
 
-    cache:
-      cache_paths:
-        - node_modules
-        - ~/.gradle
-
     scripts:
-      - name: Fix npm environment
+      - name: HARD npm bypass fix
         script: |
           npm config set engine-strict false
+          export NODE_OPTIONS=--max_old_space_size=4096
 
-      - name: Clean install
+      - name: Clean install (FORCE)
         script: |
           rm -rf node_modules package-lock.json
-          npm install --legacy-peer-deps
+          npm install --force --legacy-peer-deps
+
+      - name: Fix broken dependencies
+        script: |
+          npm audit fix --force || true
 
       - name: Android clean
         script: |
