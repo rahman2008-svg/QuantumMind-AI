@@ -1,10 +1,10 @@
 workflows:
   android-build:
-    name: Android Build (Fixed)
+    name: Android Build Fixed
     max_build_duration: 60
 
     environment:
-      node: 20
+      node: 18
       java: 17
 
     cache:
@@ -13,7 +13,11 @@ workflows:
         - ~/.gradle
 
     scripts:
-      - name: Clean install dependencies
+      - name: Fix npm environment
+        script: |
+          npm config set engine-strict false
+
+      - name: Clean install
         script: |
           rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
